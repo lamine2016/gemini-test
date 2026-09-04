@@ -15,13 +15,13 @@ jobs:
         run: |
           printf '%s' "${{ secrets.GCLOUD_CREDENTIALS }}" > $HOME/gcloud.json
 
+      - name: Debug gcloud.json
+        run: |
+          head -n 10 $HOME/gcloud.json
+
       - name: Authenticate with GCP
         run: |
           gcloud auth activate-service-account --key-file=$HOME/gcloud.json
-
-      - name: Debug gcloud.json (opsiyonel)
-        run: |
-          head -n 5 $HOME/gcloud.json
 
       - name: Run main.py
         run: |
