@@ -11,10 +11,8 @@ TOKEN = os.getenv("BLOGGER_TOKEN")
 
 def generate_news(topic):
     """Gemini ile özgün haber üretir"""
-    response = client.models.generate_content(
-        model="gemini-1.5-flash",
-        contents=f"{topic} hakkında özgün bir haber yaz."
-    )
+    chat = client.chats.create(model="gemini-1.5-flash")
+    response = chat.send_message(f"{topic} hakkında özgün bir haber yaz.")
     return f"{topic} Haberi", response.text
 
 def publish_to_blogger(title, content):
