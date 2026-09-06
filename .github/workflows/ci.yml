@@ -3,7 +3,7 @@ name: Daily News Publisher
 on:
   schedule:
     - cron: "0 9 * * *"   # her gün saat 09:00'da çalışır
-  workflow_dispatch:
+  workflow_dispatch:       # elle tetikleme için
 
 jobs:
   build:
@@ -11,10 +11,10 @@ jobs:
 
     steps:
     - name: Checkout repository
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4   # güncel sürüm
 
     - name: Set up Python
-      uses: actions/setup-python@v4
+      uses: actions/setup-python@v5   # güncel sürüm
       with:
         python-version: "3.11"
 
