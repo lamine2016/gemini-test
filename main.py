@@ -2,34 +2,65 @@ import os
 import requests
 from google import genai
 
-# --- Gemini ayarı ---
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+# --- Gemini Ayarı ---
+# SDK, GEMINI_API_KEY ortam değişkenini otomatik olarak okur.
+client = genai.Client()
+
 
 def generate_news(topic):
-    """Gemini ile özgün haber üretir"""
-    chat = client.chats.create(model="gemini-1.5-pro")  # ✅ doğru model adı
-    response = chat.send_message(f"{topic} hakkında özgün bir haber yaz.")
-    return f"{topic} Haberi", response.text
+    """Gemini ile özgün haber üretir."""
+    try:
+        # Hızlı ve güncel yanıtlar için gemini-2.5-flash modeli önerilir.
+        # Daha detaylı içerikler için "gemini-2.5-pro" da kullanabilirsiniz.
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=f"{topic} hakkında ilgi çekici ve özgün bir haber yaz."
+        )
+        return f"{topic} Haberi", response.text
+    except Exception as e:
+        print(f"[{topic}] için haber üretilirken hata oluştu: {e}")
+        return None, None
 
-# --- Blogger ayarı ---
-BLOG_ID = os.getenv("BLOGGER_SITE_ID")   # Secret'tan geliyor
-TOKEN = os.getenv("BLOGGER_TOKEN")       # Secret'tan geliyor
+
+# --- Blogger Ayarı ---
+BLOG_ID = os.getenv("BLOGGER_SITE_ID")  # Secret'tan geliyor
+TOKEN = os.getenv("BLOGGER_TOKEN")      # Secret'tan geliyor
+
 
 def publish_to_blogger(title, content):
-    """Üretilen haberi Blogger'a gönderir"""
+    """Üretilen haberi Blogger'a gönderir."""
+    if not BLOG_ID or not TOKEN:
+        print("Hata: BLOGGER_SITE_ID veya BLOGGER_TOKEN ortam değişkeni eksik!")
+        return
+
     url = f"https://www.googleapis.com/blogger/v3/blogs/{BLOG_ID}/posts/"
-    headers = {"Authorization": f"Bearer {TOKEN}"}
+    headers = {
+        "Authorization": f"Bearer {TOKEN}",
+        "Content-Type": "application/json"
+    }
     data = {
         "title": title,
         "content": content
     }
-    response = requests.post(url, headers=headers, json=data)
-    print("Blogger response:", response.status_code, response.text)
+
+    try:
+        response = requests.post(url, headers=headers, json=data)
+        if response.status_code == 200:
+            print(f" Success: '{title}' Blogger'da başarıyla yayınlandı.")
+        else:
+            print(f" Error ({response.status_code}): Blogger yayını başarısız. Yanıt: {response.text}")
+    except Exception as e:
+        print(f"Blogger'a erişirken hata oluştu: {e}")
+
 
 if __name__ == "__main__":
     topics = ["Ekonomi", "Spor", "Kültür-Sanat", "Kadın", "Sağlık", "Bilim"]
 
-    for topic in topics[:5]:  # günde 5 haber
+    for topic in topics[:5]:  # Günde 5 haber
+        print(f"\n--- {topic} için haber üretiliyor ---")
         title, content = generate_news(topic)
-        print("Üretilen Haber:", title)
-        publish_to_blogger(title, content)
+
+        if title and content:
+            publish_to_blogger(title, content)
+        else:
+            print(f"[{topic}] için haber içeriği üretilemediği için atlanıyor.")
