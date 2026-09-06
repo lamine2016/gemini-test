@@ -34,6 +34,4 @@ if __name__ == "__main__":
         print("Üretilen Haber:", title)
         publish_to_blogger(title, content)
 
-for m in client.models.list():
-    print(m.name, m.supported_methods)
 
