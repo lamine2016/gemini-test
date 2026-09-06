@@ -6,7 +6,8 @@ from google import genai
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def generate_news(topic):
-    chat = client.chats.create(model="models/gemini-1.5-flash-latest")
+    """Gemini ile özgün haber üretir"""
+    chat = client.chats.create(model="models/gemini-1.5-pro-latest")
     response = chat.send_message(f"{topic} hakkında özgün bir haber yaz.")
     return f"{topic} Haberi", response.text
 
@@ -15,9 +16,13 @@ BLOG_ID = os.getenv("BLOGGER_SITE_ID")
 TOKEN = os.getenv("BLOGGER_TOKEN")
 
 def publish_to_blogger(title, content):
+    """Üretilen haberi Blogger'a gönderir"""
     url = f"https://www.googleapis.com/blogger/v3/blogs/{BLOG_ID}/posts/"
     headers = {"Authorization": f"Bearer {TOKEN}"}
-    data = {"title": title, "content": content}
+    data = {
+        "title": title,
+        "content": content
+    }
     response = requests.post(url, headers=headers, json=data)
     print("Blogger response:", response.status_code, response.text)
 
