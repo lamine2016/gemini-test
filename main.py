@@ -17,7 +17,7 @@ TOKEN = os.getenv("BLOGGER_TOKEN")
 
 def publish_to_blogger(title, content):
     """Üretilen haberi Blogger'a gönderir"""
-    url = f"https://www.googleapis.com/blogger/v3/blogs/{356341370799140080}/posts/"
+    url = f"https://www.googleapis.com/blogger/v3/blogs/{BLOG_ID}/posts/"
     headers = {"Authorization": f"Bearer {TOKEN}"}
     data = {
         "title": title,
