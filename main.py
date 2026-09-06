@@ -33,3 +33,7 @@ if __name__ == "__main__":
         title, content = generate_news(topic)
         print("Üretilen Haber:", title)
         publish_to_blogger(title, content)
+
+for m in client.models.list():
+    print(m.name, m.supported_methods)
+
