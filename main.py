@@ -7,7 +7,7 @@ client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 def generate_news(topic):
     """Gemini ile özgün haber üretir"""
-    chat = client.chats.create(model="models/gemini-1.5-pro-latest")
+    chat = client.chats.create(model="models/gemini-1.5-pro")
     response = chat.send_message(f"{topic} hakkında özgün bir haber yaz.")
     return f"{topic} Haberi", response.text
 
