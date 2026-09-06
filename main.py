@@ -1,19 +1,20 @@
 import os
 import requests
-import google.genai as genai
+from google import genai
 
 # --- Gemini ayarı ---
-genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
-
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
 # --- Blogger ayarı ---
-BLOG_ID = os.getenv("BLOGGER_SITE_ID")   # Blogger blog ID
-TOKEN = os.getenv("BLOGGER_TOKEN")       # OAuth2 token
+BLOG_ID = os.getenv("BLOGGER_SITE_ID")
+TOKEN = os.getenv("BLOGGER_TOKEN")
 
 def generate_news(topic):
     """Gemini ile özgün haber üretir"""
-    model = genai.GenerativeModel("gemini-1.5-flash")
-    response = model.generate_content(f"{topic} hakkında özgün bir haber yaz.")
+    response = client.models.generate_content(
+        model="gemini-1.5-flash",
+        contents=f"{topic} hakkında özgün bir haber yaz."
+    )
     return f"{topic} Haberi", response.text
 
 def publish_to_blogger(title, content):
@@ -30,8 +31,7 @@ def publish_to_blogger(title, content):
 if __name__ == "__main__":
     topics = ["Ekonomi", "Spor", "Kültür-Sanat", "Kadın", "Sağlık", "Bilim"]
 
-    # Günde 5 haber üret → ilk 5 konuyu seçiyoruz
-    for topic in topics[:5]:
+    for topic in topics[:5]:  # günde 5 haber
         title, content = generate_news(topic)
         print("Üretilen Haber:", title)
         publish_to_blogger(title, content)
