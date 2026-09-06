@@ -26,6 +26,7 @@ jobs:
 
       - name: Run script
         run: python main.py
-        - name: Generate News
-          run: python main.py
+        
+      - name: Generate News
+        run: python main.py
 
