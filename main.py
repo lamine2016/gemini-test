@@ -1,9 +1,10 @@
 import os
 import requests
-import google.generativeai as genai
+import google.genai as genai
 
 # --- Gemini ayarı ---
 genai.configure(api_key=os.getenv("GEMINI_API_KEY"))
+
 
 # --- Blogger ayarı ---
 BLOG_ID = os.getenv("BLOGGER_SITE_ID")   # Blogger blog ID
