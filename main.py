@@ -1,10 +1,8 @@
 import os
-import requests
-from google import genai
+import google.genai as genai
 
-# --- Gemini Ayarı ---
-# SDK, GEMINI_API_KEY ortam değişkenini otomatik olarak okur.
-client = genai.Client()
+client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
+
 
 
 def generate_news(topic):
