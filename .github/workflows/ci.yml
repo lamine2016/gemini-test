@@ -21,3 +21,8 @@ jobs:
 
       - name: Run script
         run: python main.py
+        env:
+  GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
+  BLOGGER_SITE_ID: ${{ secrets.BLOGGER_SITE_ID }}
+  BLOGGER_TOKEN: ${{ secrets.BLOGGER_TOKEN }}
+
