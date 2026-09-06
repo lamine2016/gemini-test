@@ -1,6 +1,0 @@
-requests
-google-genai==0.2.0
-
-
-
-
