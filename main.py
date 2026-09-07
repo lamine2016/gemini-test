@@ -34,7 +34,7 @@ def publish_to_blogger(title, content):
     data = {"title": title, "content": content}
 
     try:
-        response = requests.post(url, headers=headers, json=data)
+        response = requests.post(url, headers=headers, json=data, timeout=10)
         if response.status_code in [200, 201]:
             print(f" Success: '{title}' Blogger'da başarıyla yayınlandı.")
         else:
