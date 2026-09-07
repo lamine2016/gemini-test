@@ -8,7 +8,7 @@ def generate_news(topic):
     """Gemini ile özgün haber üretir."""
     try:
         response = client.models.generate_content(
-            model="gemini-2.5-flash",
+            model="gemini-3.6-flash",
             contents=f"{topic} hakkında ilgi çekici ve özgün bir haber yaz."
         )
         return f"{topic} Haberi", response.text
