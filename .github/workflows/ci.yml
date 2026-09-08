@@ -50,4 +50,6 @@ jobs:
       - name: Blogger API ile deploy
         run: |
           gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
+          gcloud config set project ucakbileti-1350
           # Burada senin deploy komutların olacak
+
