@@ -34,7 +34,7 @@ jobs:
           BLOGGER_TOKEN: ${{ secrets.BLOGGER_TOKEN }}
         run: python main.py
 
-  deploy:   # build ile aynı hizaya dikkat et
+  deploy:
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -49,7 +49,6 @@ jobs:
 
       - name: Blogger API ile deploy
         run: |
-          gcloud auth activate-service-account --key-file=$GOOGLE_APPLICATION_CREDENTIALS
           gcloud config set project ucakbileti-1350
-          # Burada senin deploy komutların olacak
-
+          gcloud info
+          python main.py
