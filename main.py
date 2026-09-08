@@ -1,6 +1,6 @@
 import os
 import requests
-import genai
+import google.genai as genai
 
 client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
 
