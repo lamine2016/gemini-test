@@ -45,7 +45,7 @@ def publish_to_blogger(title, content):
 if __name__ == "__main__":
     topics = ["Ekonomi", "Spor", "Kültür-Sanat", "Kadın", "Sağlık", "Bilim"]
 
-    for topic in topics[:5]:
+    for topic in topics[:3]:
         print(f"\n--- {topic} için haber üretiliyor ---")
         title, content = generate_news(topic)
         if title and content:
