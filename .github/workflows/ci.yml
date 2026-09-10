@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # Repo'yu çek
+      # Repo'yu indir
       - name: Checkout repository
         uses: actions/checkout@v4
 
