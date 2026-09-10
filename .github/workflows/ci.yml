@@ -3,35 +3,28 @@ name: CI
 on:
   push:
     branches: [ "main" ]
+  schedule:
+    # TSİ 09:00, 14:00, 19:00 (UTC 06:00, 11:00, 16:00)
+    - cron: "0 6,11,16 * * *"
 
 jobs:
   build:
     runs-on: ubuntu-latest
 
     steps:
-      # Repo'yu indir
       - name: Checkout repository
         uses: actions/checkout@v4
 
-      # Google Cloud kimlik doğrulama
-      - name: Setup gcloud
-        uses: google-github-actions/setup-gcloud@v2
-        with:
-          project_id: ucakbileti-1350
-          service_account_key: ${{ secrets.GCLOUD_CREDENTIALS }}
-          export_default_credentials: true
-
-      # Python ortamı hazırla
       - name: Set up Python
         uses: actions/setup-python@v5
         with:
           python-version: '3.11'
 
-      # Bağımlılıkları yükle
       - name: Install dependencies
-        run: pip install -r requirements.txt
+        run: |
+          python -m pip install --upgrade pip
+          pip install -r requirements.txt
 
-      # Script'i çalıştır
       - name: Run script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
@@ -39,7 +32,4 @@ jobs:
           BLOGGER_TOKEN_TR: ${{ secrets.BLOGGER_TOKEN_TR }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
-        run: |
-          gcloud config set project ucakbileti-1350
-          gcloud info
-          python main.py
+        run: python main.py
