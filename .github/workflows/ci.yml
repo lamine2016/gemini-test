@@ -38,8 +38,8 @@ jobs:
       - name: Run script
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BLOGGER_SITE_ID: ${{ secrets.BLOGGER_SITE_ID }}
-          BLOGGER_TOKEN: ${{ secrets.BLOGGER_TOKEN }}
+          BLOGGER_SITE_ID: ${{ secrets.BLOGGER_SITE_TR_ID }}
+          BLOGGER_TOKEN: ${{ secrets.BLOGGER_TOKEN_TR }}
         run: python main.py
 
   deploy:
@@ -69,8 +69,8 @@ jobs:
       - name: Blogger API ile deploy
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
-          BLOGGER_SITE_ID: ${{ secrets.BLOGGER_SITE_ID }}
-          BLOGGER_TOKEN: ${{ secrets.BLOGGER_TOKEN }}
+          BLOGGER_SITE_ID: ${{ secrets.BLOGGER_SITE_TR_ID }}
+          BLOGGER_TOKEN: ${{ secrets.BLOGGER_TOKEN_TR }}
         run: |
           gcloud config set project ucakbileti-1350
           gcloud info
