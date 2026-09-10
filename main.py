@@ -31,7 +31,10 @@ def publish_to_blogger(title, content):
         return
 
     url = f"https://www.googleapis.com/blogger/v3/blogs/{BLOG_ID}/posts/"
-    headers = {"Authorization": f"Bearer {access_token}"}
+    headers = {
+        "Authorization": f"Bearer {access_token}",
+        "Content-Type": "application/json"
+    }
     data = {
         "kind": "blogger#post",
         "title": title,
@@ -43,3 +46,7 @@ def publish_to_blogger(title, content):
         print("Haber başarıyla yayınlandı:", r.json().get("url"))
     else:
         print("Haber yayınlanamadı:", r.status_code, r.text)
+
+if __name__ == "__main__":
+    # Burada test amaçlı bir gönderi yapabilirsin
+    publish_to_blogger("Test Başlık", "Bu bir test içeriğidir.")
