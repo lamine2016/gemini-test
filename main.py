@@ -17,8 +17,8 @@ def generate_news(topic):
         return None, None
 
 # --- Blogger Ayarı ---
-BLOG_ID = os.getenv("BLOGGER_SITE_ID")
-TOKEN = os.getenv("BLOGGER_TOKEN")
+BLOG_ID = os.getenv("BLOGGER_SITE_TR_ID")
+TOKEN = os.getenv("BLOGGER_TOKEN_TR")
 
 def publish_to_blogger(title, content):
     """Üretilen haberi Blogger'a gönderir."""
