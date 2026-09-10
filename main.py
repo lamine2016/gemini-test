@@ -1,54 +1,45 @@
 import os
 import requests
-import google.genai as genai
-
-client = genai.Client(api_key=os.getenv("GEMINI_API_KEY"))
-
-def generate_news(topic):
-    """Gemini ile özgün haber üretir."""
-    try:
-        response = client.models.generate_content(
-            model="gemini-3.6-flash",
-            contents=f"{topic} hakkında ilgi çekici ve özgün bir haber yaz."
-        )
-        return f"{topic} Haberi", response.text
-    except Exception as e:
-        print(f"[{topic}] için haber üretilirken hata oluştu: {e}")
-        return None, None
 
 # --- Blogger Ayarı ---
 BLOG_ID = os.getenv("BLOGGER_SITE_TR_ID")
-TOKEN = os.getenv("BLOGGER_TOKEN_TR")
+REFRESH_TOKEN = os.getenv("BLOGGER_TOKEN_TR")
+CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
+CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
+
+def get_access_token():
+    """Refresh Token'den Access Token üretir."""
+    url = "https://oauth2.googleapis.com/token"
+    data = {
+        "client_id": CLIENT_ID,
+        "client_secret": CLIENT_SECRET,
+        "refresh_token": REFRESH_TOKEN,
+        "grant_type": "refresh_token"
+    }
+    r = requests.post(url, data=data)
+    if r.status_code == 200:
+        return r.json().get("access_token")
+    else:
+        print("Access Token alınamadı:", r.text)
+        return None
 
 def publish_to_blogger(title, content):
     """Üretilen haberi Blogger'a gönderir."""
-    if not BLOG_ID or not TOKEN:
-        print("Hata: BLOGGER_SITE_ID veya BLOGGER_TOKEN ortam değişkeni eksik!")
+    access_token = get_access_token()
+    if not BLOG_ID or not access_token:
+        print("Hata: BLOGGER_SITE_TR_ID veya BLOGGER_TOKEN_TR eksik!")
         return
 
     url = f"https://www.googleapis.com/blogger/v3/blogs/{BLOG_ID}/posts/"
-    headers = {
-        "Authorization": f"Bearer {TOKEN}",
-        "Content-Type": "application/json"
+    headers = {"Authorization": f"Bearer {access_token}"}
+    data = {
+        "kind": "blogger#post",
+        "title": title,
+        "content": content
     }
-    data = {"title": title, "content": content}
 
-    try:
-        response = requests.post(url, headers=headers, json=data, timeout=10)
-        if response.status_code in [200, 201]:
-            print(f" Success: '{title}' Blogger'da başarıyla yayınlandı.")
-        else:
-            print(f" Error ({response.status_code}): {response.text}")
-    except Exception as e:
-        print(f"Blogger'a erişirken hata oluştu: {e}")
-
-if __name__ == "__main__":
-    topics = ["Ekonomi", "Spor", "Kültür-Sanat", "Kadın", "Sağlık", "Bilim"]
-
-    for topic in topics[:3]:
-        print(f"\n--- {topic} için haber üretiliyor ---")
-        title, content = generate_news(topic)
-        if title and content:
-            publish_to_blogger(title, content)
-        else:
-            print(f"[{topic}] için haber içeriği üretilemediği için atlanıyor.")
+    r = requests.post(url, headers=headers, json=data)
+    if r.status_code == 200:
+        print("Haber başarıyla yayınlandı:", r.json().get("url"))
+    else:
+        print("Haber yayınlanamadı:", r.status_code, r.text)
