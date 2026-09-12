@@ -76,9 +76,14 @@ def publish_to_blogger(title, content, labels=None, meta_description=None):
     }
 
     if labels:
-        data["labels"] = labels
+        # Etiketleri temizle ve liste halinde gönder
+        clean_labels = [lbl.strip() for lbl in labels if lbl.strip()]
+        data["labels"] = clean_labels
     if meta_description:
-        data["customMetaDescription"] = meta_description
+        # Meta açıklamayı 150 karaktere kısalt
+        safe_meta = meta_description.strip()[:150]
+        if safe_meta:
+            data["customMetaDescription"] = safe_meta
 
     r = requests.post(url, headers=headers, json=data)
     if r.status_code == 200:
