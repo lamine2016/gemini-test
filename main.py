@@ -26,10 +26,10 @@ def get_access_token():
         return None
 
 def generate_news(topic):
-    """Gemini API kullanarak kategoriye göre haber başlığı ve HTML içeriği üretir."""
+    """Gemini API kullanarak kategoriye göre haber başlığı, içerik, meta açıklama ve etiketler üretir."""
     if not GEMINI_API_KEY:
         print("Hata: GEMINI_API_KEY bulunamadı!")
-        return None, None
+        return None, None, None, None
 
     client = genai.Client(api_key=GEMINI_API_KEY)
 
@@ -37,6 +37,8 @@ def generate_news(topic):
         f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n"
         "Çıktı tam olarak şu formatta olmalı:\n"
         "BAŞLIK: [Haber Başlığı]\n"
+        "META: [150 karakterlik meta açıklama]\n"
+        "ETİKETLER: [5 tane haberle ilgili etiket, virgülle ayrılmış]\n"
         "İÇERİK: [Haberin HTML formatındaki gövdesi, <p> ve <h2> etiketleri kullan]"
     )
 
@@ -46,14 +48,16 @@ def generate_news(topic):
             contents=prompt
         )
         text = response.text
-        title = text.split("BAŞLIK:")[1].split("İÇERİK:")[0].strip()
+        title = text.split("BAŞLIK:")[1].split("META:")[0].strip()
+        meta = text.split("META:")[1].split("ETİKETLER:")[0].strip()
+        labels = text.split("ETİKETLER:")[1].split("İÇERİK:")[0].strip().split(",")
         content = text.split("İÇERİK:")[1].strip()
-        return title, content
+        return title, content, meta, labels
     except Exception as e:
         print("İçerik üretilirken veya ayrıştırılırken hata oluştu:", e)
-        return None, None
+        return None, None, None, None
 
-def publish_to_blogger(title, content):
+def publish_to_blogger(title, content, labels=None, meta_description=None):
     """Üretilen haberi Blogger'a gönderir."""
     access_token = get_access_token()
     if not BLOG_ID or not access_token:
@@ -71,6 +75,11 @@ def publish_to_blogger(title, content):
         "content": content
     }
 
+    if labels:
+        data["labels"] = labels
+    if meta_description:
+        data["customMetaDescription"] = meta_description
+
     r = requests.post(url, headers=headers, json=data)
     if r.status_code == 200:
         print("Haber başarıyla yayınlandı:", r.json().get("url"))
@@ -82,8 +91,8 @@ if __name__ == "__main__":
 
     for topic in topics:
         print(f"\n--- {topic} için haber üretiliyor ---")
-        title, content = generate_news(topic)
+        title, content, meta, labels = generate_news(topic)
         if title and content:
-            publish_to_blogger(title, content)
+            publish_to_blogger(title, content, labels=labels, meta_description=meta)
         else:
             print(f"[{topic}] için haber üretilemedi.")
