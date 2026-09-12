@@ -34,7 +34,7 @@ def generate_news():
     client = genai.Client(api_key=GEMINI_API_KEY)
     
     prompt = (
-        "Güncel ve ilgi çekici bir teknoloji/gündem haberi yaz.\n"
+        f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n"
         "Çıktı tam olarak şu formatta olmalı:\n"
         "BAŞLIK: [Haber Başlığı]\n"
         "İÇERİK: [Haberin HTML formatındaki gövdesi, <p> ve <h2> etiketleri kullan]"
@@ -78,8 +78,12 @@ def publish_to_blogger(title, content):
         print("Haber yayınlanamadı:", r.status_code, r.text)
 
 if __name__ == "__main__":
-    title, content = generate_news()
-    if title and content:
-        publish_to_blogger(title, content)
-    else:
-        print("Haber içeriği oluşturulamadığı için işlem iptal edildi.")
+    topics = ["Ekonomi", "Spor", "Teknoloji", "Sağlık"]
+
+    for topic in topics:
+        print(f"\n--- {topic} için haber üretiliyor ---")
+        title, content = generate_news(topic)
+        if title and content:
+            publish_to_blogger(title, content)
+        else:
+            print(f"[{topic}] için haber üretilemedi.")
