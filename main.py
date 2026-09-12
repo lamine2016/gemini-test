@@ -25,21 +25,21 @@ def get_access_token():
         print("Access Token alınamadı:", r.text)
         return None
 
-def generate_news():
-    """Gemini API kullanarak haber başlığı ve HTML içeriği üretir."""
+def generate_news(topic):
+    """Gemini API kullanarak kategoriye göre haber başlığı ve HTML içeriği üretir."""
     if not GEMINI_API_KEY:
         print("Hata: GEMINI_API_KEY bulunamadı!")
         return None, None
 
     client = genai.Client(api_key=GEMINI_API_KEY)
-    
+
     prompt = (
         f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n"
         "Çıktı tam olarak şu formatta olmalı:\n"
         "BAŞLIK: [Haber Başlığı]\n"
         "İÇERİK: [Haberin HTML formatındaki gövdesi, <p> ve <h2> etiketleri kullan]"
     )
-    
+
     try:
         response = client.models.generate_content(
             model="gemini-3.6-flash",
