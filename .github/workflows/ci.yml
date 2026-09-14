@@ -8,7 +8,6 @@ on:
     # TSİ 09:00, 14:00, 19:00 (UTC 06:00, 11:00, 16:00)
     - cron: "0 6,11,16 * * *"
 
-
 jobs:
   build:
     runs-on: ubuntu-latest
