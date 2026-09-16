@@ -92,7 +92,7 @@ def publish_to_blogger(title, content, labels=None, meta_description=None):
         print("Haber yayınlanamadı:", r.status_code, r.text)
 
 if __name__ == "__main__":
-    topics = ["Ekonomi", "Futbol", "Basketbol", "Voleybol", "Bilim", "Sanat", "Kültür", "Teknoloji", "Sağlık"]
+    topics = ["Ekonomi", "Futbol", "Basketbol", "Voleybol", "Bilim", "Sanat", "Kültür", "Teknoloji", "Sağlık", "Türkiye"]
 
     for topic in topics:
         print(f"\n--- {topic} için haber üretiliyor ---")
