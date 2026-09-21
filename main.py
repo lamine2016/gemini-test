@@ -93,18 +93,12 @@ def publish_to_blogger(blog_id, title, content, labels=None, meta_description=No
 if __name__ == "__main__":
     # Türkçe site için etiketler
     topics_tr = [
-        "Ekonomi", "Türkiye Süper Lig Haberleri", "NBA Basketbol",
-        "Türkiye Voleybol Ligi", "Bilim Haberleri", "Modern Sanat",
-        "Hollywood", "Teknoloji", "Türkiye Hava Durumu",
-        "Dünya Sinema", "Pop Müzik", "Magazin Ünlüler",
-        "Televizyon Dizileri", "Türkiye Sağlık", "Ankara Haberleri"
+        "Türkiye Süper Lig Haberleri", "Hollywood", "Türkiye Hava Durumu", "Televizyon Dizileri", "Ankara Haberleri"
     ]
 
     # Almanca site için etiketler
     topics_de = [
-        "Deutschland Wirtschaft", "Bundesliga", "Gesundheit Nachrichten",
-        "Technologie", "Deutschland Politik", "Deutschland Kultur",
-        "Deutschland Wetter", "Europa Nachrichten"
+        "Deutschland Wirtschaft", "Gesundheit Nachrichten", "Deutschland Politik", "Deutschland Wetter"
     ]
 
     # Türkçe siteye gönderim
