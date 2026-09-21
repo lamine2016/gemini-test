@@ -30,7 +30,7 @@ jobs:
         env:
           GEMINI_API_KEY: ${{ secrets.GEMINI_API_KEY }}
           BLOGGER_SITE_TR_ID: ${{ secrets.BLOGGER_SITE_TR_ID }}
-          BLOGGER_SITE_DE_ID: ${{ secrets.BLOGGER_SITE_TR_ID }}
+          BLOGGER_SITE_DE_ID: ${{ secrets.BLOGGER_SITE_DE_ID }}
           BLOGGER_TOKEN_TR: ${{ secrets.BLOGGER_TOKEN_TR }}
           GOOGLE_CLIENT_ID: ${{ secrets.GOOGLE_CLIENT_ID }}
           GOOGLE_CLIENT_SECRET: ${{ secrets.GOOGLE_CLIENT_SECRET }}
