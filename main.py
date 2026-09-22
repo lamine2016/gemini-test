@@ -4,8 +4,8 @@ from google import genai
 
 # --- Ortam Değişkenleri ---
 BLOG_ID_TR = os.getenv("BLOGGER_SITE_TR_ID")
-BLOG_ID_DE = os.getenv("BLOGGER_SITE_DE_ID")   # Almanca site için yeni ID
-REFRESH_TOKEN = os.getenv("BLOGGER_TOKEN_TR")  # Aynı Gmail hesabı olduğu için tek token yeterli
+BLOG_ID_DE = os.getenv("BLOGGER_SITE_DE_ID")
+REFRESH_TOKEN = os.getenv("BLOGGER_TOKEN_TR")
 CLIENT_ID = os.getenv("GOOGLE_CLIENT_ID")
 CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
@@ -19,11 +19,12 @@ def get_access_token():
         "refresh_token": REFRESH_TOKEN,
         "grant_type": "refresh_token"
     }
-    r = requests.post(url, data=data)
-    if r.status_code == 200:
+    try:
+        r = requests.post(url, data=data, timeout=30)
+        r.raise_for_status()
         return r.json().get("access_token")
-    else:
-        print("Access Token alınamadı:", r.text)
+    except Exception as e:
+        print("Access Token alınamadı:", e)
         return None
 
 def generate_news(topic):
@@ -84,31 +85,29 @@ def publish_to_blogger(blog_id, title, content, labels=None, meta_description=No
         if safe_meta:
             data["customMetaDescription"] = safe_meta
 
-    r = requests.post(url, headers=headers, json=data)
-    if r.status_code == 200:
-        print("Haber başarıyla yayınlandı:", r.json().get("url"))
-    else:
-        print("Haber yayınlanamadı:", r.status_code, r.text)
+    try:
+        r = requests.post(url, headers=headers, json=data, timeout=30)
+        if r.status_code == 200:
+            print("Haber başarıyla yayınlandı:", r.json().get("url"))
+        else:
+            print("Haber yayınlanamadı:", r.status_code, r.text)
+    except Exception as e:
+        print("Blogger API çağrısında hata:", e)
 
 if __name__ == "__main__":
-    # Türkçe site için etiketler
     topics_tr = [
         "Türkiye Süper Lig Haberleri", "Hollywood", "Türkiye Hava Durumu", "Televizyon Dizileri", "Ankara Haberleri"
     ]
-
-    # Almanca site için etiketler
     topics_de = [
         "Deutschland Wirtschaft", "Gesundheit Nachrichten", "Deutschland Politik", "Deutschland Wetter"
     ]
 
-    # Türkçe siteye gönderim
     for topic in topics_tr:
         print(f"\n--- {topic} için haber üretiliyor ---")
         title, content, meta, labels = generate_news(topic)
         if title and content:
             publish_to_blogger(BLOG_ID_TR, title, content, labels=labels, meta_description=meta)
 
-    # Almanca siteye gönderim
     for topic in topics_de:
         print(f"\n--- {topic} für Nachrichten wird erstellt ---")
         title, content, meta, labels = generate_news(topic)
