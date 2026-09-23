@@ -96,7 +96,7 @@ def publish_to_blogger(blog_id, title, content, labels=None, meta_description=No
 
 if __name__ == "__main__":
     topics_tr = [
-        "Türkiye Süper Lig Haberleri", "Hollywood", "Türkiye Hava Durumu", "Televizyon Dizileri", "Ankara Haberleri"
+        "Türkiye Süper Lig Haberleri", "Hollywood", "Türkiye Hava Durumu", "Ankara Haberleri"
     ]
     topics_de = [
         "Deutschland Wirtschaft", "Gesundheit Nachrichten", "Deutschland Politik", "Deutschland Wetter"
