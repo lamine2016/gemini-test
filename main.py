@@ -113,7 +113,7 @@ if __name__ == "__main__":
         "Deutschland Wirtschaft", "Gesundheit Nachrichten", "Deutschland Politik", "Deutschland Wetter"
     ]
 
-    for topic in topics_tr:
+for topic in topics_tr:
     print(f"\n--- {topic} için haber üretiliyor ---")
     title, content, meta, labels = generate_news(topic, lang="tr")
     if title and content:
