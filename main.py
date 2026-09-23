@@ -27,7 +27,7 @@ def get_access_token():
         print("Access Token alınamadı:", e)
         return None
 
-def generate_news(topic):
+def generate_news(topic, lang="tr"):
     """Gemini API kullanarak kategoriye göre haber üretir."""
     if not GEMINI_API_KEY:
         print("Hata: GEMINI_API_KEY bulunamadı!")
@@ -35,14 +35,25 @@ def generate_news(topic):
 
     client = genai.Client(api_key=GEMINI_API_KEY)
 
-    prompt = (
-        f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n"
-        "Çıktı tam olarak şu formatta olmalı:\n"
-        "BAŞLIK: [Haber Başlığı]\n"
-        "META: [150 karakterlik meta açıklama]\n"
-        "ETİKETLER: [5 tane haberle ilgili etiket, virgülle ayrılmış]\n"
-        "İÇERİK: [Haberin HTML formatındaki gövdesi, <p> ve <h2> etiketleri kullan]"
-    )
+    if lang == "tr":
+        prompt = (
+            f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n"
+            "Çıktı tam olarak şu formatta olmalı:\n"
+            "BAŞLIK: [Haber Başlığı]\n"
+            "META: [150 karakterlik meta açıklama]\n"
+            "ETİKETLER: [5 tane haberle ilgili etiket, virgülle ayrılmış]\n"
+            "İÇERİK: [Haberin HTML formatındaki gövdesi, <p> ve <h2> etiketleri kullan]"
+        )
+    elif lang == "de":
+        prompt = (
+            f"Schreibe einen aktuellen und originellen Nachrichtenartikel über {topic}.\n"
+            "Das Ergebnis muss genau in folgendem Format sein:\n"
+            "BAŞLIK: [Artikelüberschrift]\n"
+            "META: [Meta-Beschreibung mit 150 Zeichen]\n"
+            "ETİKETLER: [5 relevante Schlagwörter, durch Komma getrennt]\n"
+            "İÇERİK: [Artikeltext im HTML-Format mit <p> und <h2>]"
+        )
+
 
     try:
         response = client.models.generate_content(
@@ -103,13 +114,14 @@ if __name__ == "__main__":
     ]
 
     for topic in topics_tr:
-        print(f"\n--- {topic} için haber üretiliyor ---")
-        title, content, meta, labels = generate_news(topic)
-        if title and content:
-            publish_to_blogger(BLOG_ID_TR, title, content, labels=labels, meta_description=meta)
+    print(f"\n--- {topic} için haber üretiliyor ---")
+    title, content, meta, labels = generate_news(topic, lang="tr")
+    if title and content:
+        publish_to_blogger(BLOG_ID_TR, title, content, labels=labels, meta_description=meta)
 
-    for topic in topics_de:
-        print(f"\n--- {topic} für Nachrichten wird erstellt ---")
-        title, content, meta, labels = generate_news(topic)
-        if title and content:
-            publish_to_blogger(BLOG_ID_DE, title, content, labels=labels, meta_description=meta)
+for topic in topics_de:
+    print(f"\n--- {topic} für Nachrichten wird erstellt ---")
+    title, content, meta, labels = generate_news(topic, lang="de")
+    if title and content:
+        publish_to_blogger(BLOG_ID_DE, title, content, labels=labels, meta_description=meta)
+
