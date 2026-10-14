@@ -1,4 +1,6 @@
 import os
+import random
+import re
 import requests
 from google import genai
 
@@ -26,7 +28,18 @@ def get_access_token():
     except Exception as e:
         print("Access Token alınamadı:", e)
         return None
+def spin_text(text):
+    pattern = r"\{([^{}]+)\}"
 
+    while re.search(pattern, text):
+        text = re.sub(
+            pattern,
+            lambda m: random.choice(m.group(1).split("|")),
+            text,
+            count=1
+        )
+
+    return text
 def generate_news(topic, lang="tr"):
     """Gemini API kullanarak kategoriye göre haber üretir."""
 
@@ -156,20 +169,25 @@ Konuya ilişkin açıklamaların sürmesi bekleniyor.
             "Aşağıdaki spintax yapısını birebir kullanma.\n"
             "Sadece anlatım çeşitliliğini örnek al.\n\n"
 
-            f"{SPIN_STYLE}\n\n"
+            f"{spin_text(SPIN_STYLE)}\n\n"
 
             "Kurallar:\n"
             "- Haber dili kullan.\n"
             "- SEO uyumlu yaz.\n"
-            "- En az 250 kelime yaz.\n"
-            "- Tercihen 350-500 kelime arasında olsun.\n"
+            "- Haber 400 ile 600 kelime arasında olmalıdır.\n"
+            "- 400 kelimenin altında içerik üretme.\n"
+            "- En az 5 paragraf oluştur.\n"
+            "- En az 3 adet <h2> başlığı oluştur.\n"
+            "- Her paragraf en az 70 kelime olsun.\n"
+            "- Kısa haber yazma.\n"
+            "- Ajans özeti gibi davranma.\n"
+            "- Ayrıntılı analiz ve değerlendirme bölümü ekle.\n"
             "- Başlık dikkat çekici olsun.\n"
             "- Aynı cümleyi tekrar etme.\n"
             "- Giriş, gelişme ve sonuç bölümleri olsun.\n"
             "- Doğal gazetecilik dili kullan.\n"
             "- HTML formatında üret.\n"
             "- <p> ve <h2> etiketlerini kullan.\n\n"
-
             "Çıktı tam olarak şu formatta olmalı:\n"
             "BAŞLIK: [Haber Başlığı]\n"
             "META: [150 karakterlik meta açıklama]\n"
