@@ -38,16 +38,114 @@ def generate_news(topic, lang="tr"):
 
     SPIN_STYLE = """
 BAŞLIK:
-{Güncel Gelişmeler Açıklandı|Son Durum Belli Oldu|Yeni Rapor Yayımlandı|Dikkat Çeken Ayrıntılar Ortaya Çıktı}
+
+{
+Meteoroloji Son Tahminlerini Açıkladı|
+Hava Durumu Raporu Yayımlandı|
+Yeni Hava Tahmini Paylaşıldı|
+Meteorolojiden Güncel Değerlendirme|
+Hava Durumunda Son Gelişmeler|
+Meteoroloji Verileri Güncellendi|
+Uzmanlardan Yeni Hava Tahmini|
+Kentte Hava Nasıl Olacak?|
+Güncel Meteoroloji Raporu Açıklandı|
+Hava Durumu Beklentileri Netleşti
+}
 
 GİRİŞ:
-{Uzmanların değerlendirmelerine göre|Son verilere göre|Yapılan açıklamalara göre|Güncel raporlar doğrultusunda}
 
-GELİŞME:
-{Konuya ilişkin değerlendirmeler sürüyor.|Yeni bilgiler kamuoyu ile paylaşılmaya devam ediyor.|İlgili gelişmeler yakından takip ediliyor.|Yetkililer süreci yakından izliyor.}
+{
+Meteoroloji Genel Müdürlüğü tarafından yayımlanan son verilere göre|
+Uzmanların yaptığı son değerlendirmeler doğrultusunda|
+Güncel meteorolojik analizlere göre|
+Kamuoyu ile paylaşılan son tahminler doğrultusunda|
+Meteoroloji kaynaklarından alınan son bilgilere göre|
+Açıklanan güncel hava durumu raporuna göre|
+Yetkili kurumların paylaştığı verilere göre|
+Hava durumu tahminlerinde dikkat çeken ayrıntılar ortaya çıktı|
+Yeni meteorolojik veriler kamuoyu ile paylaşıldı|
+Uzman raporları doğrultusunda yeni değerlendirmeler yapıldı
+}
+
+{
+Kent genelinde hava koşullarının gün boyunca etkisini sürdürmesi bekleniyor.|
+Bölge genelinde hava durumunun belirleyici olmaya devam edeceği tahmin ediliyor.|
+Vatandaşların güncel tahminleri takip etmeleri öneriliyor.|
+Meteorolojik değişimlerin gün içerisinde yeniden güncellenebileceği belirtiliyor.|
+Hava şartlarına ilişkin değerlendirmeler yakından takip ediliyor.
+}
+
+GELİŞME 1:
+
+{
+Uzmanlar sıcaklık değerlerinde önemli değişiklikler yaşanabileceğini belirtiyor.|
+Meteorolojik verilere göre sıcaklıkların mevsim normallerine yakın seyretmesi bekleniyor.|
+Gün içindeki sıcaklık değişimlerinin hissedilebilir seviyelerde olabileceği değerlendiriliyor.|
+Tahmin modelleri sıcaklık değerlerinin gün boyunca değişkenlik gösterebileceğini ortaya koyuyor.|
+Kent genelinde sıcaklıkların dengeli bir seyir izlemesi bekleniyor.
+}
+
+{
+Sabah saatlerinden itibaren hava koşullarının etkisini göstermesi bekleniyor.|
+Özellikle günün ilk bölümünde hava durumunun belirleyici olacağı ifade ediliyor.|
+Yetkililer gün içerisinde oluşabilecek değişimlere dikkat çekiyor.|
+Hava raporlarında gün boyu takip edilmesi gereken ayrıntılar yer alıyor.|
+Meteorolojik veriler günün farklı saatlerinde değişimlere işaret ediyor.
+}
+
+GELİŞME 2:
+
+{
+Rüzgar hızında zaman zaman artış yaşanabileceği belirtiliyor.|
+Meteoroloji uzmanları yer yer kuvvetli rüzgarların etkili olabileceğini ifade ediyor.|
+Rüzgarın bölgesel olarak farklı şiddetlerde hissedilebileceği değerlendiriliyor.|
+Rüzgar koşullarının açık alanlarda daha belirgin hissedilmesi bekleniyor.|
+Günlük tahminlerde rüzgar faktörünün dikkatle izlenmesi gerektiği belirtiliyor.
+}
+
+{
+Nem oranındaki değişimin hissedilen sıcaklığı etkileyebileceği bildiriliyor.|
+Atmosferik koşulların gün boyunca farklılık gösterebileceği tahmin ediliyor.|
+Uzmanlar özellikle hassas grupların hava şartlarını dikkate almasını öneriyor.|
+Hava kalitesine ilişkin göstergelerin de takip edilmesi tavsiye ediliyor.|
+Meteorolojik parametrelerin gün içinde yeniden değerlendirilebileceği belirtiliyor.
+}
+
+ANALİZ:
+
+{
+Uzmanlar hava durumunun günlük planlamalar açısından önem taşıdığına dikkat çekiyor.|
+Meteorolojik tahminlerin özellikle ulaşım ve açık hava faaliyetleri açısından takip edilmesi öneriliyor.|
+Vatandaşların resmi kurumlardan gelecek açıklamalara dikkat etmeleri tavsiye ediliyor.|
+Güncel tahminlerin belirli aralıklarla yenilenebileceği belirtiliyor.|
+Yetkililer hava koşullarına karşı hazırlıklı olunmasının önemine vurgu yapıyor.
+}
+
+{
+Hava durumuna ilişkin yeni verilerin açıklanması bekleniyor.|
+Meteorolojik değerlendirmelerin gün içerisinde güncellenebileceği ifade ediliyor.|
+Yeni tahmin modelleri doğrultusunda ek açıklamalar yapılabileceği belirtiliyor.|
+Uzmanların değerlendirmeleri doğrultusunda süreç yakından takip ediliyor.|
+Kamuoyunun resmi kaynaklar üzerinden bilgilendirilmeye devam edileceği bildiriliyor.
+}
 
 SONUÇ:
-{Yeni gelişmelerin önümüzdeki günlerde netleşmesi bekleniyor.|Resmi açıklamaların takip edilmesi tavsiye ediliyor.|Uzmanlar sürecin yakından takip edilmesini öneriyor.|Konu gündemdeki yerini koruyor.}
+
+{
+Meteoroloji uzmanları vatandaşların güncel tahminleri takip etmelerini öneriyor.|
+Yetkililer resmi açıklamalara göre hareket edilmesinin önem taşıdığını belirtiyor.|
+Yeni veriler doğrultusunda hava durumunda değişiklik yaşanabileceği ifade ediliyor.|
+Meteorolojik gelişmelerin yakından izlenmesi tavsiye ediliyor.|
+Hava koşullarına ilişkin değerlendirmelerin devam edeceği bildiriliyor.
+}
+
+{
+Önümüzdeki saatlerde yeni tahminlerin paylaşılması bekleniyor.|
+Meteorolojik verilerin yeniden güncellenebileceği belirtiliyor.|
+Güncel raporların takip edilmesi öneriliyor.|
+Uzmanların yeni değerlendirmeleri bekleniyor.|
+Konuya ilişkin açıklamaların sürmesi bekleniyor.
+}
 """
 
     if lang == "tr":
