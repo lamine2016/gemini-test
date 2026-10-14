@@ -29,22 +29,58 @@ def get_access_token():
 
 def generate_news(topic, lang="tr"):
     """Gemini API kullanarak kategoriye göre haber üretir."""
+
     if not GEMINI_API_KEY:
         print("Hata: GEMINI_API_KEY bulunamadı!")
         return None, None, None, None
 
     client = genai.Client(api_key=GEMINI_API_KEY)
 
+    SPIN_STYLE = """
+BAŞLIK:
+{Güncel Gelişmeler Açıklandı|Son Durum Belli Oldu|Yeni Rapor Yayımlandı|Dikkat Çeken Ayrıntılar Ortaya Çıktı}
+
+GİRİŞ:
+{Uzmanların değerlendirmelerine göre|Son verilere göre|Yapılan açıklamalara göre|Güncel raporlar doğrultusunda}
+
+GELİŞME:
+{Konuya ilişkin değerlendirmeler sürüyor.|Yeni bilgiler kamuoyu ile paylaşılmaya devam ediyor.|İlgili gelişmeler yakından takip ediliyor.|Yetkililer süreci yakından izliyor.}
+
+SONUÇ:
+{Yeni gelişmelerin önümüzdeki günlerde netleşmesi bekleniyor.|Resmi açıklamaların takip edilmesi tavsiye ediliyor.|Uzmanlar sürecin yakından takip edilmesini öneriyor.|Konu gündemdeki yerini koruyor.}
+"""
+
     if lang == "tr":
+
         prompt = (
-            f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n"
+            f"{topic} kategorisinde güncel ve özgün bir haber yaz.\n\n"
+
+            "Aşağıdaki spintax yapısını birebir kullanma.\n"
+            "Sadece anlatım çeşitliliğini örnek al.\n\n"
+
+            f"{SPIN_STYLE}\n\n"
+
+            "Kurallar:\n"
+            "- Haber dili kullan.\n"
+            "- SEO uyumlu yaz.\n"
+            "- En az 250 kelime yaz.\n"
+            "- Tercihen 350-500 kelime arasında olsun.\n"
+            "- Başlık dikkat çekici olsun.\n"
+            "- Aynı cümleyi tekrar etme.\n"
+            "- Giriş, gelişme ve sonuç bölümleri olsun.\n"
+            "- Doğal gazetecilik dili kullan.\n"
+            "- HTML formatında üret.\n"
+            "- <p> ve <h2> etiketlerini kullan.\n\n"
+
             "Çıktı tam olarak şu formatta olmalı:\n"
             "BAŞLIK: [Haber Başlığı]\n"
             "META: [150 karakterlik meta açıklama]\n"
             "ETİKETLER: [5 tane haberle ilgili etiket, virgülle ayrılmış]\n"
-            "İÇERİK: [Haberin HTML formatındaki gövdesi, <p> ve <h2> etiketleri kullan]"
+            "İÇERİK: [HTML haber içeriği]"
         )
-    elif lang == "de":
+
+    else:
+
         prompt = (
             f"Schreibe einen aktuellen und originellen Nachrichtenartikel über {topic}.\n"
             "Das Ergebnis muss genau in folgendem Format sein:\n"
@@ -54,21 +90,47 @@ def generate_news(topic, lang="tr"):
             "İÇERİK: [Artikeltext im HTML-Format mit <p> und <h2>]"
         )
 
-
     try:
+
         response = client.models.generate_content(
-            model="gemini-3.6-flash",
+            model="gemini-2.5-flash",
             contents=prompt
         )
+
         text = response.text
+
         title = text.split("BAŞLIK:")[1].split("META:")[0].strip()
         meta = text.split("META:")[1].split("ETİKETLER:")[0].strip()
         labels = text.split("ETİKETLER:")[1].split("İÇERİK:")[0].strip().split(",")
         content = text.split("İÇERİK:")[1].strip()
+
         return title, content, meta, labels
+
     except Exception as e:
+
         print("İçerik üretilirken hata oluştu:", e)
-        return None, None, None, None
+
+        title = f"{topic.capitalize()} Gelişmeleri"
+
+        meta = f"{topic} hakkında güncel gelişmeler ve son bilgiler."
+
+        labels = [topic]
+
+        content = f"""
+<p>{topic.capitalize()} konusunda güncel bilgiler kamuoyu ile paylaşıldı.</p>
+
+<h2>Son Durum</h2>
+
+<p>Konuya ilişkin gelişmeler yakından takip edilirken yeni açıklamaların gün içerisinde gelmesi bekleniyor.</p>
+
+<p>Uzmanlar ve yetkililer tarafından yapılan değerlendirmeler doğrultusunda vatandaşların resmi kaynakları takip etmeleri öneriliyor.</p>
+
+<h2>Güncel Değerlendirmeler</h2>
+
+<p>Kamuoyunu ilgilendiren gelişmelerin düzenli olarak güncelleneceği belirtilirken konuya ilişkin yeni bilgilerin paylaşılması bekleniyor.</p>
+"""
+
+        return title, content, meta, labels
 
 def publish_to_blogger(blog_id, title, content, labels=None, meta_description=None):
     """Üretilen haberi Blogger'a gönderir."""
