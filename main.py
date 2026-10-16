@@ -1,3 +1,4 @@
+import time
 import os
 import requests
 import feedparser
@@ -15,7 +16,7 @@ CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-MAX_POSTS = 8
+MAX_POSTS = 4
 
 RSS_FEEDS = [
     "https://www.ntv.com.tr/teknoloji.rss",
@@ -322,6 +323,8 @@ if __name__ == "__main__":
         )
 
         published += 1
+
+        time.sleep(20)
 
     print(
         f"Toplam yayınlanan haber: {published}"
