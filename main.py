@@ -19,9 +19,9 @@ GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 MAX_POSTS = 4
 
 RSS_FEEDS = [
-    "https://www.ntv.com.tr/teknoloji.rss",
     "https://www.haberturk.com/rss/magazin.xml",
-    "https://www.haberturk.com/rss/kultur-sanat.xml"
+    "https://www.haberturk.com/rss/kultur-sanat.xml",
+    "https://www.ntv.com.tr/teknoloji.rss"
 ]
 
 BLOCKED_WORDS = [
