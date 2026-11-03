@@ -188,6 +188,9 @@ def generate_news(
     source_title,
     source_text
 ):
+    # En fazla 3 kez yeniden deneme hakkı tanıyoruz
+    max_retries = 3
+    retry_delay = 30
 
     client = genai.Client(
         api_key=GEMINI_API_KEY
@@ -200,15 +203,12 @@ Aşağıdaki haberi yeniden yorumlayarak
 özgün bir haber oluştur.
 
 KAYNAK BAŞLIK:
-
 {source_title}
 
 KAYNAK METİN:
-
 {source_text}
 
 KURALLAR:
-
 - En az 600 kelime yaz.
 - Tamamen yeni başlık oluştur.
 - Haber dili kullan.
@@ -220,64 +220,69 @@ KURALLAR:
 - HTML üret.
 
 ÇIKTI FORMATI:
-
 BAŞLIK:
 META:
 ETİKETLER:
 İÇERİK:
 """
 
-    try:
+    for attempt in range(1, max_retries + 1):
+        try:
+            response = client.models.generate_content(
+                model="gemini-3.8-flash",
+                contents=prompt
+            )
 
-        response = client.models.generate_content(
-            model="gemini-3.8-flash",
-            contents=prompt
-        )
+            text = response.text
 
-        text = response.text
+            title = text.split(
+                "BAŞLIK:"
+            )[1].split(
+                "META:"
+            )[0].strip()
 
-        title = text.split(
-            "BAŞLIK:"
-        )[1].split(
-            "META:"
-        )[0].strip()
+            meta = text.split(
+                "META:"
+            )[1].split(
+                "ETİKETLER:"
+            )[0].strip()
 
-        meta = text.split(
-            "META:"
-        )[1].split(
-            "ETİKETLER:"
-        )[0].strip()
+            labels = text.split(
+                "ETİKETLER:"
+            )[1].split(
+                "İÇERİK:"
+            )[0].strip().split(",")
 
-        labels = text.split(
-            "ETİKETLER:"
-        )[1].split(
-            "İÇERİK:"
-        )[0].strip().split(",")
+            content = text.split(
+                "İÇERİK:"
+            )[1].strip()
 
-        content = text.split(
-            "İÇERİK:"
-        )[1].strip()
+            # Başarıyla tamamlandıysa döngüden çık ve verileri gönder
+            return (
+                title,
+                content,
+                meta,
+                labels
+            )
 
-        return (
-            title,
-            content,
-            meta,
-            labels
-        )
+        except Exception as e:
+            print(f"Gemini hatası oluştu (Deneme {attempt}/{max_retries}): {e}")
+            
+            # Eğer son deneme de başarısız olduysa döngüyü bitir, hata fırlatma
+            if attempt == max_retries:
+                print("Maksimum deneme sayısına ulaşıldı. Bu haber pas geçiliyor.")
+                break
+                
+            print(f"Sunucu yoğun veya kısıtlı olabilir. {retry_delay} saniye sonra tekrar deneniyor...")
+            time.sleep(retry_delay)
 
-    except Exception as e:
+    return (
+        None,
+        None,
+        None,
+        None
+    )
 
-        print(
-            "Gemini hatası:",
-            e
-        )
-
-        return (
-            None,
-            None,
-            None,
-            None
-        )
 
 # ----------------------
 # MAIN
