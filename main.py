@@ -190,7 +190,7 @@ def generate_news(
 ):
     # En fazla 3 kez yeniden deneme hakkı tanıyoruz
     max_retries = 3
-    retry_delay = 30
+    base_delay = 5
 
     client = genai.Client(
         api_key=GEMINI_API_KEY
