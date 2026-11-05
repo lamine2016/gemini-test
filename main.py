@@ -209,19 +209,15 @@ KAYNAK METİN:
 {source_text}
 
 KURALLAR:
-- En az 600 kelime yaz.
-- Tamamen yeni başlık oluştur.
-- Haber dili kullan.
+- En az 400-500 kelime yaz.
+- Özgün bir başlık, en az 3 adet h2 etiketi kullan.
+- Haber diliyle detaylı bir içerik oluştur.
+- Sadece aşağıdaki formatta çıktı ver, başka açıklama ekleme.
 - Kopyala yapıştır yapma.
-- En az 3 adet h2 başlığı kullan.
-- SEO uyumlu yaz.
-- Magazin, teknoloji, spor veya kültür sanat haberi formatında yaz.
-- Sonuç bölümü ekle.
-- HTML üret.
+
 
 ÇIKTI FORMATI:
 BAŞLIK:
-META:
 ETİKETLER:
 İÇERİK:
 """
