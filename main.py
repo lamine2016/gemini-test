@@ -16,7 +16,7 @@ CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-MAX_POSTS = 3
+MAX_POSTS = 2
 retry_delay = 5
 
 RSS_FEEDS = [
