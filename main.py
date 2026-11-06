@@ -16,12 +16,12 @@ CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-MAX_POSTS = 4
+MAX_POSTS = 3
+retry_delay = 5
 
 RSS_FEEDS = [
     "https://www.haberturk.com/rss/magazin.xml",
     "https://www.haberturk.com/rss/kultur-sanat.xml",
-    "https://www.ntv.com.tr/teknoloji.rss"
 ]
 
 BLOCKED_WORDS = [
