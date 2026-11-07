@@ -224,7 +224,7 @@ ETİKETLER:
 
     for attempt in range(1, max_retries + 1):
 
-    try:
+        try:
 
         response = client.models.generate_content(
             model="gemini-2.5-flash",
