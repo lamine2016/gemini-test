@@ -69,6 +69,7 @@ def get_access_token():
 
         return None
 
+
 # ----------------------
 # BLOGGER
 # ----------------------
@@ -121,6 +122,7 @@ def publish_to_blogger(
             e
         )
 
+
 # ----------------------
 # SİYASET FİLTRESİ
 # ----------------------
@@ -133,6 +135,7 @@ def is_blocked(text):
         word in text
         for word in BLOCKED_WORDS
     )
+
 
 # ----------------------
 # RSS
@@ -179,6 +182,7 @@ def get_rss_news():
 
     return news
 
+
 # ----------------------
 # GEMINI
 # ----------------------
@@ -187,7 +191,7 @@ def generate_news(
     source_title,
     source_text
 ):
-    # En fazla 3 kez yeniden deneme hakkı tanıyoruz
+
     max_retries = 3
     base_delay = 5
 
@@ -209,13 +213,14 @@ KAYNAK METİN:
 
 KURALLAR:
 - En az 250-350 kelime yaz.
-- Özgün bir başlık, en az 3 adet h2 etiketi kullan.
-- Haber diliyle detaylı bir içerik oluştur.
-- Sadece aşağıdaki formatta çıktı ver, başka açıklama ekleme.
-- Kopyala yapıştır yapma.
-
+- Özgün bir başlık oluştur.
+- En az 3 adet H2 başlığı kullan.
+- Haber diliyle yaz.
+- Tamamen özgün olsun.
+- Aşağıdaki format dışında çıktı verme.
 
 ÇIKTI FORMATI:
+
 BAŞLIK:
 META:
 ETİKETLER:
@@ -226,45 +231,79 @@ ETİKETLER:
 
         try:
 
-        response = client.models.generate_content(
-            model="gemini-2.5-flash",
-            contents=prompt
-        )
+            response = client.models.generate_content(
+                model="gemini-2.5-flash",
+                contents=prompt
+            )
 
-        text = response.text
+            text = response.text
 
-        # işlemler...
+            title = text.split(
+                "BAŞLIK:"
+            )[1].split(
+                "META:"
+            )[0].strip()
 
-        return (
-            title,
-            content,
-            meta,
-            labels
-        )
+            meta = text.split(
+                "META:"
+            )[1].split(
+                "ETİKETLER:"
+            )[0].strip()
 
-    except Exception as e:
+            labels = text.split(
+                "ETİKETLER:"
+            )[1].split(
+                "İÇERİK:"
+            )[0].strip().split(",")
 
-        print(f"Gemini hatası oluştu (Deneme {attempt}/{max_retries}): {e}")
+            labels = [
+                label.strip()
+                for label in labels
+                if label.strip()
+            ]
 
-        if attempt == max_retries:
-            print("Maksimum deneme sayısına ulaşıldı. Bu haber pas geçiliyor.")
-            break
+            content = text.split(
+                "İÇERİK:"
+            )[1].strip()
 
-        wait_time = base_delay * attempt
+            return (
+                title,
+                content,
+                meta,
+                labels
+            )
 
-        print(
-            f"Sunucu yoğun veya kısıtlı olabilir. "
-            f"{wait_time} saniye sonra tekrar deneniyor..."
-        )
+        except Exception as e:
 
-        time.sleep(wait_time)
+            print(
+                f"Gemini hatası oluştu "
+                f"(Deneme {attempt}/{max_retries}): {e}"
+            )
 
-return (
-    None,
-    None,
-    None,
-    None
-)
+            if attempt == max_retries:
+
+                print(
+                    "Maksimum deneme sayısına ulaşıldı. "
+                    "Bu haber pas geçiliyor."
+                )
+
+                break
+
+            wait_time = base_delay * attempt
+
+            print(
+                f"Sunucu yoğun olabilir. "
+                f"{wait_time} saniye sonra tekrar deneniyor..."
+            )
+
+            time.sleep(wait_time)
+
+    return (
+        None,
+        None,
+        None,
+        None
+    )
 
 
 # ----------------------
