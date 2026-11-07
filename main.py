@@ -222,63 +222,48 @@ ETİKETLER:
 """
 
     for attempt in range(1, max_retries + 1):
-        try:
-            response = client.models.generate_content(
-                model="gemini-3.8-flash",
-                contents=prompt
-            )
 
-            text = response.text
+    try:
 
-            title = text.split(
-                "BAŞLIK:"
-            )[1].split(
-                "META:"
-            )[0].strip()
+        response = client.models.generate_content(
+            model="gemini-2.5-flash",
+            contents=prompt
+        )
 
-            meta = text.split(
-                "META:"
-            )[1].split(
-                "ETİKETLER:"
-            )[0].strip()
+        text = response.text
 
-            labels = text.split(
-                "ETİKETLER:"
-            )[1].split(
-                "İÇERİK:"
-            )[0].strip().split(",")
+        # işlemler...
 
-            content = text.split(
-                "İÇERİK:"
-            )[1].strip()
+        return (
+            title,
+            content,
+            meta,
+            labels
+        )
 
-            # Başarıyla tamamlandıysa döngüden çık ve verileri gönder
-            return (
-                title,
-                content,
-                meta,
-                labels
-            )
+    except Exception as e:
 
-        except Exception as e:
-            print(f"Gemini hatası oluştu (Deneme {attempt}/{max_retries}): {e}")
-            
-            # Eğer son deneme de başarısız olduysa döngüyü bitir, hata fırlatma
-            if attempt == max_retries:
-                print("Maksimum deneme sayısına ulaşıldı. Bu haber pas geçiliyor.")
-                break
-                
-            wait_time = base_delay * attempt
+        print(f"Gemini hatası oluştu (Deneme {attempt}/{max_retries}): {e}")
 
-print(f"Sunucu yoğun veya kısıtlı olabilir. {wait_time} saniye sonra tekrar deneniyor...")
-time.sleep(wait_time)
+        if attempt == max_retries:
+            print("Maksimum deneme sayısına ulaşıldı. Bu haber pas geçiliyor.")
+            break
 
-    return (
-        None,
-        None,
-        None,
-        None
-    )
+        wait_time = base_delay * attempt
+
+        print(
+            f"Sunucu yoğun veya kısıtlı olabilir. "
+            f"{wait_time} saniye sonra tekrar deneniyor..."
+        )
+
+        time.sleep(wait_time)
+
+return (
+    None,
+    None,
+    None,
+    None
+)
 
 
 # ----------------------
