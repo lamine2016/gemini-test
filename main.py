@@ -215,6 +215,7 @@ KURALLAR:
 - En az 250-350 kelime yaz.
 - Özgün bir başlık oluştur.
 - En az 3 adet H2 başlığı kullan.
+- H2 başlıkları HTML formatında olsun.
 - Haber diliyle yaz.
 - Tamamen özgün olsun.
 - Aşağıdaki format dışında çıktı verme.
