@@ -17,7 +17,6 @@ CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
 MAX_POSTS = 2
-retry_delay = 5
 
 RSS_FEEDS = [
     "https://www.haberturk.com/rss/magazin.xml",
@@ -209,7 +208,7 @@ KAYNAK METİN:
 {source_text}
 
 KURALLAR:
-- En az 400-500 kelime yaz.
+- En az 250-350 kelime yaz.
 - Özgün bir başlık, en az 3 adet h2 etiketi kullan.
 - Haber diliyle detaylı bir içerik oluştur.
 - Sadece aşağıdaki formatta çıktı ver, başka açıklama ekleme.
@@ -269,8 +268,10 @@ ETİKETLER:
                 print("Maksimum deneme sayısına ulaşıldı. Bu haber pas geçiliyor.")
                 break
                 
-            print(f"Sunucu yoğun veya kısıtlı olabilir. {retry_delay} saniye sonra tekrar deneniyor...")
-            time.sleep(retry_delay)
+            wait_time = base_delay * attempt
+
+print(f"Sunucu yoğun veya kısıtlı olabilir. {wait_time} saniye sonra tekrar deneniyor...")
+time.sleep(wait_time)
 
     return (
         None,
