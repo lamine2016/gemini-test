@@ -16,7 +16,7 @@ CLIENT_SECRET = os.getenv("GOOGLE_CLIENT_SECRET")
 
 GEMINI_API_KEY = os.getenv("GEMINI_API_KEY")
 
-MAX_POSTS = 2
+MAX_POSTS = 1
 
 RSS_FEEDS = [
     "https://www.haberturk.com/rss/magazin.xml",
